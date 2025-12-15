@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   name: 'user',
   title: 'User',
@@ -15,4 +14,4 @@ export default {
       type: 'string',
     },
   ],
-};
+}

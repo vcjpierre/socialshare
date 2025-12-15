@@ -27,13 +27,11 @@ export default {
       name: 'image',
       title: 'Image',
       type: 'image',
-      options: {
-        hotspot: true,
-      },
+      options: {hotsopt: true},
     },
     {
       name: 'userId',
-      title: 'UserId',
+      title: 'UserID',
       type: 'string',
     },
     {
@@ -45,13 +43,13 @@ export default {
       name: 'save',
       title: 'Save',
       type: 'array',
-      of: [{ type: 'save' }],
+      of: [{type: 'save'}],
     },
     {
       name: 'comments',
       title: 'Comments',
       type: 'array',
-      of: [{ type: 'comment' }],
+      of: [{type: 'comment'}],
     },
   ],
-};
+}

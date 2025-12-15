@@ -1,8 +1,8 @@
-import React from 'react';
-import Masonry from 'react-masonry-css';
-import Pin from './Pin';
+import PropTypes from "prop-types";
+import Masonry from "react-masonry-css";
+import Pin from "./Pin";
 
-const breakpointColumnsObj = {
+const breakpointObj = {
   default: 4,
   3000: 6,
   2000: 5,
@@ -11,10 +11,16 @@ const breakpointColumnsObj = {
   500: 1,
 };
 
-const MasonryLayout = ({ pins }) => (
-  <Masonry className="flex animate-slide-fwd" breakpointCols={breakpointColumnsObj}>
-    {pins?.map((pin) => <Pin key={pin._id} pin={pin} className="w-max" />)}
-  </Masonry>
-);
+export default function MasonryLayout({ pins }) {
+  return (
+    <Masonry className="flex animate-slide-fwd" breakpointCols={breakpointObj}>
+      {pins?.map((pin) => (
+        <Pin key={pin._id} pin={pin} className="w-max" />
+      ))}
+    </Masonry>
+  );
+}
 
-export default MasonryLayout;
+MasonryLayout.propTypes = {
+  pins: PropTypes.arrayOf(PropTypes.object),
+};

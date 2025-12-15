@@ -1,59 +1,57 @@
-import React from 'react';
-import GoogleLogin from 'react-google-login';
-import { useNavigate } from 'react-router-dom';
-import { FcGoogle } from 'react-icons/fc';
-import shareVideo from '../assets/share.mp4';
-import logo from '../assets/logowhite.png';
+import { GoogleLogin } from "@react-oauth/google";
+import jwtDecode from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import { client as sanityClient } from "../client";
 
-import { client } from '../client';
+import logo from "../assets/logowhite.png";
+import shareVideo from "../assets/share.mp4";
 
-const Login = () => {
+export default function Login() {
   const navigate = useNavigate();
-  const responseGoogle = (response) => {
-    localStorage.setItem('user', JSON.stringify(response.profileObj));
-    const { name, googleId, imageUrl } = response.profileObj;
-    const doc = {
+
+  function responseGoogle(response) {
+    if (!response) return;
+
+    // sub is just a unique ID assigned by Google
+    // using image instead of picture to be consistent with JSM
+    const {
+      name,
+      sub: googleId,
+      picture: image,
+    } = jwtDecode(response.credential);
+
+    localStorage.setItem("user", JSON.stringify({ name, googleId, image }));
+
+    const document = {
       _id: googleId,
-      _type: 'user',
+      _type: "user",
       userName: name,
-      image: imageUrl,
+      image: image,
     };
-    client.createIfNotExists(doc).then(() => {
-      navigate('/', { replace: true });
-    });
-  };
+
+    sanityClient
+      .createIfNotExists(document)
+      .then(() => navigate("/", { replace: true }));
+  }
 
   return (
     <div className="flex justify-start items-center flex-col h-screen">
-      <div className=" relative w-full h-full">
+      <div className="relative w-full h-full">
         <video
+          className="w-full h-full object-cover"
           src={shareVideo}
           type="video/mp4"
+          autoPlay
           loop
           controls={false}
           muted
-          autoPlay
-          className="w-full h-full object-cover"
         />
-
-        <div className="absolute flex flex-col justify-center items-center top-0 right-0 left-0 bottom-0    bg-blackOverlay">
+        <div className="absolute flex flex-col justify-center items-center inset-0 bg-blackOverlay">
           <div className="p-5">
-            <img src={logo} width="130px" />
+            <img src={logo} alt="" style={{ width: "130px" }} />
           </div>
-
           <div className="shadow-2xl">
             <GoogleLogin
-              clientId={`${process.env.REACT_APP_GOOGLE_API_TOKEN}`}
-              render={(renderProps) => (
-                <button
-                  type="button"
-                  className="bg-mainColor flex justify-center items-center p-3 rounded-lg cursor-pointer outline-none"
-                  onClick={renderProps.onClick}
-                  disabled={renderProps.disabled}
-                >
-                  <FcGoogle className="mr-4" /> Sign in with google
-                </button>
-              )}
               onSuccess={responseGoogle}
               onFailure={responseGoogle}
               cookiePolicy="single_host_origin"
@@ -63,6 +61,4 @@ const Login = () => {
       </div>
     </div>
   );
-};
-
-export default Login;
+}
