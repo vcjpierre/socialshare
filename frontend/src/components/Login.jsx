@@ -31,7 +31,11 @@ export default function Login() {
 
     sanityClient
       .createIfNotExists(document)
-      .then(() => navigate("/", { replace: true }));
+      .then(() => {
+        // Dispatch custom event to notify other components about login
+        window.dispatchEvent(new Event("userLogin"));
+        navigate("/", { replace: true });
+      });
   }
 
   return (
