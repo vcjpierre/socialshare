@@ -1,11 +1,24 @@
 import { GoogleLogin } from "@react-oauth/google";
 import jwtDecode from "jwt-decode";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { client as sanityClient } from "../client";
+import { fetchUser } from "../utils/fetchUser";
 
 import logo from "../assets/logowhite.png";
 import shareVideo from "../assets/share.mp4";
 
 export default function Login() {
+  const navigate = useNavigate();
+
+  // Redirect to home if user is already logged in
+  useEffect(() => {
+    const user = fetchUser();
+    if (user) {
+      navigate("/", { replace: true });
+    }
+  }, [navigate]);
+
   function responseGoogle(response) {
     if (!response) return;
 
