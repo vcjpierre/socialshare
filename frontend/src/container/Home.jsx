@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { HiMenu } from "react-icons/hi";
 import { Link, Route, Routes } from "react-router-dom";
@@ -15,7 +15,7 @@ export default function Home() {
   const [user, setUser] = useState(null);
   const scrollRef = useRef(null);
 
-  const fetchUserData = useCallback(() => {
+  useEffect(() => {
     const userInfo = fetchUser();
     if (userInfo?.googleId) {
       const query = userQuery(userInfo.googleId);
@@ -24,24 +24,6 @@ export default function Home() {
       });
     }
   }, []);
-
-  useEffect(() => {
-    fetchUserData();
-  }, [fetchUserData]);
-
-  // Listen for storage changes and custom login event
-  useEffect(() => {
-    const handleStorageChange = () => {
-      fetchUserData();
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-    window.addEventListener("userLogin", handleStorageChange);
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      window.removeEventListener("userLogin", handleStorageChange);
-    };
-  }, [fetchUserData]);
 
   useEffect(() => {
     scrollRef.current.scrollTo(0, 0);

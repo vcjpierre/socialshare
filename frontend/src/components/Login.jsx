@@ -1,14 +1,11 @@
 import { GoogleLogin } from "@react-oauth/google";
 import jwtDecode from "jwt-decode";
-import { useNavigate } from "react-router-dom";
 import { client as sanityClient } from "../client";
 
 import logo from "../assets/logowhite.png";
 import shareVideo from "../assets/share.mp4";
 
 export default function Login() {
-  const navigate = useNavigate();
-
   function responseGoogle(response) {
     if (!response) return;
 
@@ -32,9 +29,8 @@ export default function Login() {
     sanityClient
       .createIfNotExists(document)
       .then(() => {
-        // Dispatch custom event to notify other components about login
-        window.dispatchEvent(new Event("userLogin"));
-        navigate("/", { replace: true });
+        // Force a page reload to ensure all components get the new user data
+        window.location.href = "/";
       });
   }
 
