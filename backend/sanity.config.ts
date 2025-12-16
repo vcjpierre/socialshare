@@ -8,7 +8,7 @@ const devOnlyPlugins = [getStartedPlugin()]
 
 export default defineConfig({
   name: 'default',
-  title: 'shareme-jsm',
+  title: 'socialshare',
 
   projectId: '1ze5usx7',
   dataset: 'production',
